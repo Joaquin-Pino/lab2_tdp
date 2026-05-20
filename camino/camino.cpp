@@ -6,9 +6,10 @@ Camino::Camino() : pesoTotal(0), beneficioTotal(0) {}
 Camino::Camino(std::vector<int> camino, const Grafo& grafo) : camino(camino){
     pesoTotal = calcularPesoTotal(grafo);
     beneficioTotal = calcularBeneficioTotal(grafo);
+    this->grafo = &grafo;
 }
 
-void Camino::agregarNodo(int id, const Grafo& grafo){
+void Camino::agregarNodo(int id){
     // nodo no debe estar visitado
     if (visitados.count(id)){
         return; // nodo ya se encuentra, no hacer nada
@@ -18,7 +19,7 @@ void Camino::agregarNodo(int id, const Grafo& grafo){
         visitados.insert(id);
         camino.push_back(id);
 
-         std::vector<Nodo> vecinos = grafo.getVecinos(0); // primer nodo
+         std::vector<Nodo> vecinos = grafo->getVecinos(0); // primer nodo
         
         //  TODO: busqueda debe ser log(n)
          for (const Nodo& n : vecinos){
@@ -35,7 +36,7 @@ void Camino::agregarNodo(int id, const Grafo& grafo){
     int idUltimoNodo = camino.at(camino.size() - 1);
     // sumar costo
 
-    std::vector<Nodo> vecinos = grafo.getVecinos(idUltimoNodo);
+    std::vector<Nodo> vecinos = grafo->getVecinos(idUltimoNodo);
 
     // TODO ESTA BUSQUEDA DEBERIA SER EN O(logN)
     for(const Nodo& n : vecinos){
@@ -49,14 +50,14 @@ void Camino::agregarNodo(int id, const Grafo& grafo){
     camino.push_back(id);
 }
 
-void Camino::eliminarNodo(int id, const Grafo& grafo){
-    std::vector<Nodo> vecinos = grafo.getVecinos(id);
+void Camino::eliminarNodo(int id){
+    std::vector<Nodo> vecinos = grafo->getVecinos(id);
 
     // borrar del camino
     for (int i = 0; i < camino.size() ; i++){
         if (camino[i] == id){
-            Nodo temp = grafo.getArista(camino[i - 1], id);
-            Nodo temp2 = grafo.getArista(id, camino[i+1]);
+            Nodo temp = grafo->getArista(camino[i - 1], id);
+            Nodo temp2 = grafo->getArista(id, camino[i+1]);
 
             // reducir pesoTotal y beneficioTotal
             pesoTotal -= (temp.costo + temp2.costo);
@@ -91,5 +92,23 @@ void Camino::intercambiarNodos(int id1, int id2){
     camino[indx1] = camino[indx2];
     camino[indx2] = temp;
 
+    recalcularPesoYBeneficio();
     // calcular nuevo peso y beneficio del camino
+}
+
+void Camino::recalcularPesoYBeneficio(){
+    if (camino.size() == 0){
+        return;
+    }
+
+    int costo = 0;
+    int beneficio = 0;
+    for (int i = 1; i < camino.size(); i++){
+        Nodo temp = grafo->getArista(camino[i -1], camino[i]);
+        costo += temp.costo;
+        beneficio += temp.beneficio;
+    }
+
+    pesoTotal = costo;
+    beneficioTotal = beneficio;
 }

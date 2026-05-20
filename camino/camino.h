@@ -10,8 +10,10 @@ private:
     std::unordered_set<int> visitados; // guarda id de nodos visitados, tabla hash por lo que consulta es o(1)
     std::vector<int> camino;
 
+    const Grafo* grafo;
     int calcularPesoTotal(const Grafo& g);
     int calcularBeneficioTotal(const Grafo& g);
+    void recalcularPesoYBeneficio();
 
 public:
     Camino();
@@ -27,8 +29,8 @@ public:
 
     bool verificarCamino(int wMax); // verifica si camino es valido
 
-    void agregarNodo(int id, const Grafo& grafo);
-    void eliminarNodo(int id, const Grafo& grafo);
+    void agregarNodo(int id);
+    void eliminarNodo(int id);
 
     int getUltimoNodo();
 
