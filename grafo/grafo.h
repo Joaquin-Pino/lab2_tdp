@@ -3,14 +3,13 @@
 #include <string>
 #include "../nodo/nodo.h"
 
-
 class Grafo {
 private:
     int cantVert;
     int cantArist;
     int maxW;
     std::vector<std::vector<Nodo>> listaAdy;
-
+    
 public:
     Grafo(int cantVert, int cantArist, int maxW);
 
@@ -25,4 +24,6 @@ public:
 
     std::vector<int> dijkstra(int origen) const;
     std::vector<int> dijkstraInvertido(int destino) const;
+
+    Nodo getArista(int a, int b)const;
 };

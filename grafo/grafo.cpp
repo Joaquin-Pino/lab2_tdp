@@ -2,6 +2,7 @@
 #include <fstream>
 #include <stdexcept>
 #include <queue>
+#include <sstream>
 #include <climits>
 
 Grafo::Grafo(int cantVert, int cantArist, int maxW)
@@ -91,4 +92,22 @@ std::vector<int> Grafo::dijkstraInvertido(int destino) const {
         }
     }
     return dist;
+}
+
+
+Nodo Grafo::getArista(int a, int b) const{
+    // retorna {costo, beneficio}, {0,0} en caso de que no exista arista
+    std::vector<Nodo> vecinos = getVecinos(a);
+    Nodo nodo;
+    for (const Nodo& n : vecinos){
+        if (n.destino == b){
+            nodo = n;
+            return nodo;
+        }
+    }
+
+    // tiramos error ya que no se pueden devolver referencias nulas
+    std::ostringstream msg;
+    msg << "no se encontro arista desde " << a << " hasta "<< b;
+    throw std::runtime_error(msg.str());
 }
