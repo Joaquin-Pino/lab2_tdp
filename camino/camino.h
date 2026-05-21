@@ -22,7 +22,7 @@ public:
     int getPesoTotal();
     int getBeneficioTotal();
 
-    bool nodoFueVisitado(int id);
+    bool nodoFueVisitado(int id) const;
     void marcarNodoVisitado(int id);
 
     void intercambiarNodos(int id1, int id2);

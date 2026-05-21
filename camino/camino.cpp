@@ -8,40 +8,17 @@ Camino::Camino(std::vector<int> camino, const Grafo& grafo) :  pesoTotal(0), ben
 }
 
 void Camino::agregarNodo(int id){
-    // nodo no debe estar visitado
-    if (visitados.count(id)){
-        return; // nodo ya se encuentra, no hacer nada
-    }
-    // caso camino vacio
-    if(camino.size() == 0){
-        visitados.insert(id);
-        camino.push_back(id);
+    if (visitados.count(id)) return;
+    visitados.insert(id);
 
-         std::vector<Nodo> vecinos = grafo->getVecinos(0); // primer nodo
-        
-        //  TODO: busqueda debe ser log(n)
-         for (const Nodo& n : vecinos){
+    if (!camino.empty()){
+        int idUltimoNodo = camino.back();
+        for (const Nodo& n : grafo->getVecinos(idUltimoNodo)){
             if (n.destino == id){
                 pesoTotal += n.costo;
                 beneficioTotal += n.beneficio;
                 break;
             }
-         }
-        return;
-    }
-    // agregamos nodo
-    visitados.insert(id);
-    int idUltimoNodo = camino.at(camino.size() - 1);
-    // sumar costo
-
-    std::vector<Nodo> vecinos = grafo->getVecinos(idUltimoNodo);
-
-    // TODO ESTA BUSQUEDA DEBERIA SER EN O(logN)
-    for(const Nodo& n : vecinos){
-        if (n.destino == id){
-            pesoTotal += n.costo;
-            beneficioTotal += n.beneficio;
-            break;
         }
     }
 
@@ -115,8 +92,8 @@ void Camino::marcarNodoVisitado(int id){
     visitados.insert(id);
 }
 
-bool Camino::nodoFueVisitado(int id){
-    return visitados.find(id)!= visitados.end();
+bool Camino::nodoFueVisitado(int id) const {
+    return visitados.find(id) != visitados.end();
 }
 
 bool Camino::verificarCamino(int wMax){
