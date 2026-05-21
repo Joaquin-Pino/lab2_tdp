@@ -51,6 +51,27 @@ void test_getAristaNoExiste() {
     std::cout << "test_getAristaNoExiste: OK\n";
 }
 
+void test_cargarDesdeArchivo() {
+    Grafo g = Grafo::cargarDesdeArchivo("ejemplo.txt");
+    assert(g.getCantVert() == 4);
+    assert(g.getMaxW() == 7);
+    assert(g.getNodoDestino() == 3);
+
+    Nodo a01 = g.getArista(0, 1);
+    assert(a01.costo == 1 && a01.beneficio == 4);
+
+    Nodo a12 = g.getArista(1, 2);
+    assert(a12.costo == 2 && a12.beneficio == 3);
+
+    Nodo a23 = g.getArista(2, 3);
+    assert(a23.costo == 3 && a23.beneficio == 2);
+
+    Nodo a30 = g.getArista(3, 0);
+    assert(a30.costo == 4 && a30.beneficio == 1);
+
+    std::cout << "test_cargarDesdeArchivo: OK\n";
+}
+
 void test_dijkstra() {
     // 0->1 (1), 0->2 (4), 1->2 (2), 1->3 (5), 2->3 (1)
     // camino minimo 0->3: 0->1->2->3 = 4
@@ -92,6 +113,7 @@ int main() {
     test_insertarYGetVecinos();
     test_getArista();
     test_getAristaNoExiste();
+    test_cargarDesdeArchivo();
     test_dijkstra();
     test_dijkstraInvertido();
     std::cout << "--- Todos los tests de Grafo pasaron ---\n";

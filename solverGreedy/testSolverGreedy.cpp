@@ -92,12 +92,26 @@ void test_peso_insuficiente() {
     std::cout << "test_peso_insuficiente: OK\n";
 }
 
+void test_desde_archivo() {
+    Grafo g = Grafo::cargarDesdeArchivo("ejemplo.txt");
+    SolverGreedy solver(g);
+    Camino sol = solver.resolver();
+
+    std::vector<int> cam = sol.getCamino();
+    assert(cam == (std::vector<int>{0, 1, 2, 3}));
+    assert(sol.getPesoTotal() == 6);
+    assert(sol.getBeneficioTotal() == 9);
+    assert(sol.getPesoTotal() <= g.getMaxW());
+    std::cout << "test_desde_archivo: OK\n";
+}
+
 int main() {
     test_llega_al_destino();
     test_no_supera_peso();
     test_sin_nodos_repetidos();
     test_elige_por_ratio();
     test_peso_insuficiente();
+    test_desde_archivo();
     std::cout << "--- Todos los tests de SolverGreedy pasaron ---\n";
     return 0;
 }
