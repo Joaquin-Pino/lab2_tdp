@@ -12,6 +12,7 @@ int SolverGreedy::obtenerMejorNodo(int idNodoActual, int pesoDisponible, const C
 
     for (const Nodo& n : vecinos){
         if (n.costo == 0 || n.costo > pesoDisponible || sol.nodoFueVisitado(n.destino)) continue;
+        
         float ratio = (float) n.beneficio / n.costo;
         if (ratio > maxRatio){
             maxRatio = ratio;
@@ -23,12 +24,11 @@ int SolverGreedy::obtenerMejorNodo(int idNodoActual, int pesoDisponible, const C
 }
 
 Camino SolverGreedy::resolver(){
-    
     int idActual = 0;
     int pesoMax = grafo->getMaxW();
     Camino sol({}, *grafo);
 
-    while (idActual != grafo->getCantVert() -1){
+    while (idActual != grafo->getCantVert() - 1){
         sol.agregarNodo(idActual);
         int mejorId = obtenerMejorNodo(idActual, pesoMax, sol);
          
@@ -39,7 +39,6 @@ Camino SolverGreedy::resolver(){
         Nodo arista = grafo->getArista(idActual, mejorId);
         pesoMax -= arista.costo;
         idActual = mejorId;
-       
     }
 
     sol.agregarNodo(idActual); // para agregar al ultimo nodo de la sol

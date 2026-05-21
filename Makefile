@@ -1,11 +1,12 @@
 CXX      = g++
 CXXFLAGS = -std=c++17 -Wall
 
-GRAFO_SRC  = grafo/grafo.cpp
-CAMINO_SRC = camino/camino.cpp
+GRAFO_SRC        = grafo/grafo.cpp
+CAMINO_SRC       = camino/camino.cpp
+SOLVER_GREEDY_SRC = solverGreedy/solverGreedy.cpp
 
 
-all: testGrafo testCamino
+all: testGrafo testCamino testSolverGreedy
 
 testGrafo: $(GRAFO_SRC) grafo/testGrafo.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -13,8 +14,11 @@ testGrafo: $(GRAFO_SRC) grafo/testGrafo.cpp
 testCamino: $(GRAFO_SRC) $(CAMINO_SRC) camino/testCamino.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-main: $(GRAFO_SRC) $(CAMINO_SRC) main.cpp
+testSolverGreedy: $(GRAFO_SRC) $(CAMINO_SRC) $(SOLVER_GREEDY_SRC) solverGreedy/testSolverGreedy.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+main: $(GRAFO_SRC) $(CAMINO_SRC) $(SOLVER_GREEDY_SRC) main.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:
-	rm -f main testGrafo testCamino
+	rm -f main testGrafo testCamino testSolverGreedy
