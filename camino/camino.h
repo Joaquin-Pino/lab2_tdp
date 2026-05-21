@@ -11,9 +11,9 @@ private:
     std::vector<int> camino;
 
     const Grafo* grafo;
-    int calcularPesoTotal(const Grafo& g);
-    int calcularBeneficioTotal(const Grafo& g);
-    void recalcularPesoYBeneficio();
+    int calcularPesoTotal(); // implementar si es necesario
+    int calcularBeneficioTotal(); // implementar si es necesario
+    void calcularYAsignarPesoYBeneficio();
 
 public:
     Camino();
@@ -23,7 +23,7 @@ public:
     int getBeneficioTotal();
 
     bool nodoFueVisitado(int id);
-    bool marcarNodoVisitado(int id);
+    void marcarNodoVisitado(int id);
 
     void intercambiarNodos(int id1, int id2);
 

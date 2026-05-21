@@ -1,12 +1,10 @@
 #include "camino.h"
 
-
-Camino::Camino() : pesoTotal(0), beneficioTotal(0) {}
+Camino::Camino() : pesoTotal(0), beneficioTotal(0), grafo(nullptr) {}
 
 Camino::Camino(std::vector<int> camino, const Grafo& grafo) : camino(camino){
-    pesoTotal = calcularPesoTotal(grafo);
-    beneficioTotal = calcularBeneficioTotal(grafo);
     this->grafo = &grafo;
+    calcularYAsignarPesoYBeneficio();
 }
 
 void Camino::agregarNodo(int id){
@@ -51,8 +49,6 @@ void Camino::agregarNodo(int id){
 }
 
 void Camino::eliminarNodo(int id){
-    std::vector<Nodo> vecinos = grafo->getVecinos(id);
-
     // borrar del camino
     for (int i = 0; i < camino.size() ; i++){
         if (camino[i] == id){
@@ -92,11 +88,10 @@ void Camino::intercambiarNodos(int id1, int id2){
     camino[indx1] = camino[indx2];
     camino[indx2] = temp;
 
-    recalcularPesoYBeneficio();
-    // calcular nuevo peso y beneficio del camino
+    calcularYAsignarPesoYBeneficio();
 }
 
-void Camino::recalcularPesoYBeneficio(){
+void Camino::calcularYAsignarPesoYBeneficio(){
     if (camino.size() == 0){
         return;
     }
@@ -111,4 +106,39 @@ void Camino::recalcularPesoYBeneficio(){
 
     pesoTotal = costo;
     beneficioTotal = beneficio;
+}
+
+void Camino::marcarNodoVisitado(int id){
+    if (visitados.find(id) != visitados.end()){
+        return;
+    }
+    visitados.insert(id);
+}
+
+bool Camino::nodoFueVisitado(int id){
+    return visitados.find(id)!= visitados.end();
+}
+
+bool Camino::verificarCamino(int wMax){
+    return pesoTotal <= wMax;
+}
+
+int Camino::getUltimoNodo(){
+    if (camino.size() == 0){
+        throw std::runtime_error("no se puede obtener el ultimo nodo de un camino vacio");
+    }
+
+    return camino[camino.size() -1];
+}
+
+std::vector<int> Camino::getCamino(){
+    return camino;
+}
+
+int Camino::getBeneficioTotal(){
+    return beneficioTotal;
+}
+
+int Camino::getPesoTotal(){
+    return pesoTotal;
 }
