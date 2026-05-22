@@ -44,28 +44,20 @@ void Camino::eliminarNodo(int id){
     visitados.erase(id);
 }
 
-void Camino::intercambiarNodos(int id1, int id2){
+bool Camino::intercambiarNodos(int id1, int id2){
     int indx1 = -1;
     int indx2 = -1;
 
-    for (int i = 0; i < camino.size(); i++){
-        if (id1 == camino[i]){
-            indx1 = i;
-        }
-        if (id2 == camino[i]){
-            indx2 = i;
-        }
+    for (int i = 0; i < (int)camino.size(); i++){
+        if (id1 == camino[i]) indx1 = i;
+        if (id2 == camino[i]) indx2 = i;
     }
 
-    if (indx1 == -1 || indx2 == -1){
-        throw std::runtime_error("no se encontro un nodo en el camino para hacer intercambio");
-    }
-    
-    int temp = camino[indx1];
-    camino[indx1] = camino[indx2];
-    camino[indx2] = temp;
+    if (indx1 == -1 || indx2 == -1) return false;
 
+    std::swap(camino[indx1], camino[indx2]);
     calcularYAsignarPesoYBeneficio();
+    return true;
 }
 
 void Camino::calcularYAsignarPesoYBeneficio(){
@@ -118,4 +110,38 @@ int Camino::getBeneficioTotal(){
 
 int Camino::getPesoTotal(){
     return pesoTotal;
+}
+
+bool Camino::esCaminoCompleto(){
+    if (camino.empty()) return false;
+    return camino.front() == 0 && camino.back() == grafo->getCantVert() - 1;
+}
+
+float Camino::getRatioNodo(int id){
+    for (int i = 1; i < (int)camino.size() - 1; i++){
+        if (camino[i] == id){
+            Nodo entrada = grafo->getArista(camino[i-1], id);
+            Nodo salida  = grafo->getArista(id, camino[i+1]);
+            int costo = entrada.costo + salida.costo;
+            if (costo == 0) return 0.0f;
+            return (float)(entrada.beneficio + salida.beneficio) / costo;
+        }
+    }
+    return -1.0f;
+}
+
+void Camino::reemplazarNodo(int oldId, int newId){
+    for (int i = 1; i < (int)camino.size() - 1; i++){
+        if (camino[i] == oldId){
+            visitados.erase(oldId);
+            camino[i] = newId;
+            visitados.insert(newId);
+            calcularYAsignarPesoYBeneficio();
+            return;
+        }
+    }
+}
+
+int Camino::getLargo(){
+    return camino.size();
 }

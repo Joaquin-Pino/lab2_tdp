@@ -25,5 +25,8 @@ public:
     std::vector<int> dijkstra(int origen) const;
     std::vector<int> dijkstraInvertido(int destino) const;
 
+    std::vector<int> dijkstraCamino(int origen, int destino) const;
+    float getRatioMejorEntrada(int id) const;
+
     Nodo getArista(int a, int b)const;
 };

@@ -22,11 +22,14 @@ public:
     int getPesoTotal();
     int getBeneficioTotal();
 
+    int getLargo();
+
     bool nodoFueVisitado(int id) const;
     void marcarNodoVisitado(int id);
 
-    void intercambiarNodos(int id1, int id2);
+    bool intercambiarNodos(int id1, int id2);
 
+    //todo: implementar correctamente
     bool verificarCamino(int wMax); // verifica si camino es valido
 
     void agregarNodo(int id);
@@ -34,5 +37,8 @@ public:
 
     int getUltimoNodo();
 
+    bool esCaminoCompleto();
+    float getRatioNodo(int id);
+    void reemplazarNodo(int oldId, int newId);
     std::vector<int> getCamino();
 };

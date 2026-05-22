@@ -4,6 +4,7 @@
 #include <queue>
 #include <sstream>
 #include <climits>
+#include <algorithm>
 
 Grafo::Grafo(int cantVert, int cantArist, int maxW)
     : cantVert(cantVert), cantArist(cantArist), maxW(maxW),
@@ -62,6 +63,41 @@ std::vector<int> Grafo::dijkstra(int origen) const {
     return dist;
 }
 
+std::vector<int> Grafo::dijkstraCamino(int origen, int destino) const {
+    std::vector<int> dist(cantVert, INT_MAX);
+    std::vector<int> prev(cantVert, -1); // predecesor de cada nodo
+    std::priority_queue<std::pair<int,int>,
+        std::vector<std::pair<int,int>>,
+        std::greater<>> pq;
+
+    dist[origen] = 0;
+    pq.push({0, origen});
+
+    while (!pq.empty()) {
+        int d = pq.top().first;
+        int u = pq.top().second;
+        pq.pop();
+        if (d > dist[u]) continue;
+        for (const Nodo& v : listaAdy[u]) {
+            if (dist[u] + v.costo < dist[v.destino]) {
+                dist[v.destino] = dist[u] + v.costo;
+                prev[v.destino] = u; // guardas por dónde llegaste
+                pq.push({dist[v.destino], v.destino});
+            }
+        }
+    }
+
+    // reconstruir camino desde destino hacia atrás
+    std::vector<int> camino;
+    if (dist[destino] == INT_MAX) return camino; // no hay camino
+
+    for (int v = destino; v != -1; v = prev[v])
+        camino.push_back(v);
+
+    std::reverse(camino.begin(), camino.end());
+    return camino; // [origen, ..., destino]
+}
+
 std::vector<int> Grafo::dijkstraInvertido(int destino) const {
     // Construye lista de adyacencia invertida y corre Dijkstra desde destino.
     // El resultado dist[v] = costo mínimo en peso de v hasta destino.
@@ -94,6 +130,19 @@ std::vector<int> Grafo::dijkstraInvertido(int destino) const {
     return dist;
 }
 
+
+float Grafo::getRatioMejorEntrada(int id) const {
+    float mejor = -1.0f;
+    for (int u = 0; u < cantVert; u++) {
+        for (const Nodo& n : listaAdy[u]) {
+            if (n.destino == id && n.costo > 0) {
+                float r = (float)n.beneficio / n.costo;
+                if (r > mejor) mejor = r;
+            }
+        }
+    }
+    return mejor;
+}
 
 Nodo Grafo::getArista(int a, int b) const{
     // retorna {costo, beneficio}, {0,0} en caso de que no exista arista
