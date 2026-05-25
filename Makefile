@@ -5,9 +5,10 @@ GRAFO_SRC        = grafo/grafo.cpp
 CAMINO_SRC       = camino/camino.cpp
 SOLVER_GREEDY_SRC = solverGreedy/solverGreedy.cpp
 SOLVER_2OPT_SRC   = 2opt/solver2opt.cpp
+ALGORITMO_SRC     = algoritmos/algoritmo.cpp
 
 
-all: testGrafo testCamino testSolverGreedy
+all: testGrafo testCamino testSolverGreedy testAlgoritmo
 
 testGrafo: $(GRAFO_SRC) grafo/testGrafo.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -18,8 +19,11 @@ testCamino: $(GRAFO_SRC) $(CAMINO_SRC) camino/testCamino.cpp
 testSolverGreedy: $(GRAFO_SRC) $(CAMINO_SRC) $(SOLVER_GREEDY_SRC) solverGreedy/testSolverGreedy.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+testAlgoritmo: $(GRAFO_SRC) $(ALGORITMO_SRC) algoritmos/testAlgoritmo.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 main: $(GRAFO_SRC) $(CAMINO_SRC) $(SOLVER_GREEDY_SRC) main.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 clean:
-	rm -f main testGrafo testCamino testSolverGreedy
+	rm -f main testGrafo testCamino testSolverGreedy testAlgoritmo

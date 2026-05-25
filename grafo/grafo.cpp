@@ -160,3 +160,15 @@ Nodo Grafo::getArista(int a, int b) const{
     msg << "no se encontro arista desde " << a << " hasta "<< b;
     throw std::runtime_error(msg.str());
 }
+
+bool Grafo::existeArista(int origen, int final) const {
+    std::vector<Nodo> vecinos = getVecinos(origen);
+
+    for (const Nodo& n : vecinos){
+        if (n.destino == final){
+            return true;
+        }
+    }
+
+    return false;
+}

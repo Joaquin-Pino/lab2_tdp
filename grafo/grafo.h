@@ -29,4 +29,6 @@ public:
     float getRatioMejorEntrada(int id) const;
 
     Nodo getArista(int a, int b)const;
+
+    bool existeArista(int origen, int destino) const;
 };

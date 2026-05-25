@@ -1,5 +1,5 @@
 #include "camino.h"
-
+#include <stdexcept>
 Camino::Camino() : pesoTotal(0), beneficioTotal(0), grafo(nullptr) {}
 
 Camino::Camino(std::vector<int> camino, const Grafo& grafo) :  pesoTotal(0), beneficioTotal(0), camino(camino){

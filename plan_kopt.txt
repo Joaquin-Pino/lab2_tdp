@@ -1,0 +1,84 @@
+SolverKopt — Plan de implementación
+=====================================
+
+ESTRUCTURA DE CLASES
+--------------------
+- SolverKopt — clase independiente, misma interfaz que Solver2opt
+  - Constructor: SolverKopt(const Grafo&, Camino, int k)
+  - resolver() -> Camino
+  - Métodos privados:
+    - combinar(candidatos, k, inicio, acumulador, resultado)
+    - permutar(candidatos, huecos, usados, acumulador, resultado)
+
+
+FLUJO DE resolver()
+-------------------
+1. Si el camino no es completo, intentar completarlo con dijkstraCamino (igual que Solver2opt)
+2. Si sigue incompleto, retornar el camino tal como está
+3. Loop principal:
+   a. Construir lista de candidatos a sacar: nodos intermedios ordenados por ratio p/w ASC (peores primero)
+   b. Construir lista de candidatos a meter: nodos fuera del camino ordenados por ratio p/w DESC (mejores primero)
+   c. Generar combinaciones de K nodos a sacar (pueden ser consecutivos o no)
+   d. Para cada combinación:
+      - Derivar la lista de huecos: pares (predecesor, sucesor) para cada posición a rellenar
+      - Generar permutaciones de K nodos a meter con poda por conectividad
+      - Si encuentra swap válido que mejora, aplicarlo y reiniciar loop
+   e. Si ningún swap mejora, terminar
+
+
+ESTRUCTURA DE HUECOS
+--------------------
+Dada una combinación a sacar del camino, cada hueco queda definido por
+el nodo del camino que lo precede y el que lo sucede.
+
+Ejemplo con camino [0, A, B, C, D, E, 5]:
+- Sacar (B, C) consecutivos  -> hueco 1: (A, D)
+  Camino resultante: [0, A, X, Y, D, E, 5]
+  Aristas necesarias: A->X, X->Y, Y->D
+
+- Sacar (B, D) no consecutivos -> hueco 1: (A, C), hueco 2: (C, E)
+  Camino resultante: [0, A, X, C, Y, E, 5]
+  Aristas necesarias: A->X, X->C, C->Y, Y->E
+
+Regla general para cada hueco j con nodo entrante in_j:
+  - Debe existir arista predecesor_j -> in_j
+  - Debe existir arista in_j -> sucesor_j
+
+
+BACKTRACKING DE COMBINACIONES A SACAR
+--------------------------------------
+- Recursivo con índice de inicio creciente para evitar duplicados
+- Solo considera nodos intermedios (excluye nodo 0 y nodo N-1)
+- Parámetros: candidatos, k, indiceInicio, acumulador, resultado
+
+
+BACKTRACKING DE PERMUTACIONES A METER (con poda)
+-------------------------------------------------
+- Recursivo, en cada paso j verifica que existen ambas aristas del hueco j:
+    predecesor_j -> in_j
+    in_j -> sucesor_j
+- Si alguna arista no existe, poda esa rama completa
+- Parámetros: candidatos, huecos, k, usados, acumulador, resultado
+
+
+VALIDACIÓN FINAL DE UN SWAP ([out1..outK], [in1..inK])
+-------------------------------------------------------
+- Ningún inX ya está en el camino
+- Todas las aristas de los huecos existen (verificado durante el backtracking)
+- Peso resultante <= W
+- Beneficio resultante > beneficio actual
+
+
+CASO K=1
+--------
+Debe comportarse igual que Solver2opt:
+- Un solo hueco: (prev(out), next(out))
+- Una sola arista de entrada y una de salida a verificar
+
+
+OPTIMIZACIÓN PENDIENTE (no implementar ahora)
+---------------------------------------------
+- Reemplazar la recolección de permutaciones por un callback
+  std::function<bool(vector<int>)> para evaluación lazy.
+  Permite parar al encontrar el primer swap válido sin generar
+  todas las permutaciones primero.
