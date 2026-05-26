@@ -41,4 +41,6 @@ public:
     float getRatioNodo(int id);
     void reemplazarNodo(int oldId, int newId);
     std::vector<int> getCamino();
+
+    int getPosicionNodo(int idNodo);
 };

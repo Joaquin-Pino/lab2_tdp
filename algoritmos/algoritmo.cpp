@@ -28,6 +28,7 @@ void Algoritmo::combinarAux(const std::vector<int>& candidatos, int k, int i, st
     combinarAux(candidatos, k, i + 1, acum, resultado);
 }
 
+// se incluyen los huecos generados para hacer podas y no generar todas las permutaciones posibles
 std::vector<std::vector<int>> Algoritmo::permutar(const std::vector<int>& candidatos, const std::vector<std::pair<int,int>>& huecos, int k, const Grafo& grafo) {
     std::vector<std::vector<int>> res;
     std::vector<int> acum;

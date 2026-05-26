@@ -145,3 +145,13 @@ void Camino::reemplazarNodo(int oldId, int newId){
 int Camino::getLargo(){
     return camino.size();
 }
+
+int Camino::getPosicionNodo(int idNodo){
+    for (int i = 0; i < (int) camino.size(); i++){
+        if (camino[i] == idNodo){
+            return i;
+        }
+    }
+
+    return -1;
+}
