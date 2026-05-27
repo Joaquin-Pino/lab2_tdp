@@ -7,9 +7,10 @@ SOLVER_GREEDY_SRC = solverGreedy/solverGreedy.cpp
 SOLVER_2OPT_SRC   = 2opt/solver2opt.cpp
 ALGORITMO_SRC     = algoritmos/algoritmo.cpp
 SOLVER_KOPT_SRC   = kopt/solverKopt.cpp
+BREAKOUT_SRC      = breakout/breakout.cpp
 
 
-all: testGrafo testCamino testSolverGreedy testAlgoritmo testSolverKopt
+all: testGrafo testCamino testSolverGreedy testAlgoritmo testSolverKopt testBreakout
 
 testGrafo: $(GRAFO_SRC) grafo/testGrafo.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -29,5 +30,8 @@ testSolverKopt: $(GRAFO_SRC) $(CAMINO_SRC) $(ALGORITMO_SRC) $(SOLVER_KOPT_SRC) $
 main: $(GRAFO_SRC) $(CAMINO_SRC) $(SOLVER_GREEDY_SRC) main.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
+testBreakout: $(GRAFO_SRC) $(CAMINO_SRC) $(ALGORITMO_SRC) $(SOLVER_GREEDY_SRC) $(SOLVER_KOPT_SRC) $(BREAKOUT_SRC) breakout/testBreakout.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
 clean:
-	rm -f main testGrafo testCamino testSolverGreedy testAlgoritmo testSolverKopt
+	rm -f main testGrafo testCamino testSolverGreedy testAlgoritmo testSolverKopt testBreakout

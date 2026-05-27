@@ -35,7 +35,7 @@ bool SolverKopt::swapValido(int idAnterior, int id, int posterior){
     return (grafo->existeArista(idAnterior, id) && grafo->existeArista(id, posterior));
 }
 
- std::vector<std::pair<int,int>> SolverKopt::obtenerHuecos(std::vector<int> candidatos){
+    std::vector<std::pair<int,int>> SolverKopt::obtenerHuecos(std::vector<int> candidatos){
 
     std::vector<std::pair<int,int>> res;
 
@@ -57,7 +57,6 @@ bool SolverKopt::swapValido(int idAnterior, int id, int posterior){
     bool mejoro = true;
     while (mejoro){
         mejoro = false;
-
         std::vector<int> cam = camino.getCamino();
         std::vector<int> intermedios(cam.begin() + 1, cam.end() - 1);
 
@@ -135,4 +134,13 @@ Camino SolverKopt::resolverSalto(){
     }
 
     return camino;
+}
+
+void SolverKopt::setK(int k){
+    this->k = k;
+    return;
+}
+
+int SolverKopt::getK() const{
+    return k;
 }

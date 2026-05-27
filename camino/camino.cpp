@@ -100,7 +100,7 @@ int Camino::getUltimoNodo(){
     return camino[camino.size() -1];
 }
 
-std::vector<int> Camino::getCamino(){
+std::vector<int> Camino::getCamino() const{
     return camino;
 }
 

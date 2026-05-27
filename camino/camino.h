@@ -40,7 +40,7 @@ public:
     bool esCaminoCompleto();
     float getRatioNodo(int id);
     void reemplazarNodo(int oldId, int newId);
-    std::vector<int> getCamino();
+    std::vector<int> getCamino() const;
 
     int getPosicionNodo(int idNodo);
 };

@@ -24,4 +24,6 @@ public:
     Camino resolver();
     Camino resolverSalto();
 
+    void setK(int k);
+    int getK() const;
 };
